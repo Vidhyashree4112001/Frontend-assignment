@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidenav a {
+            padding: 10px 8px 10px 32px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        @media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 15px;
+            }
+
+            .sidenav a {
+                font-size: 18px;
+            }
+        }
+
+        /* Responsive table styling */
+        table {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 1rem;
+            background-color: transparent;
+        }
+
+        thead {
+            display: table-header-group;
+            vertical-align: middle;
+            border-color: inherit;
+        }
+
+        th,
+        td {
+            border: 1px solid #dee2e6;
+            padding: 0.75rem;
+            vertical-align: top;
+        }
+
+        th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Side navigation menu -->
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#" onclick="showSection('project')">Project</a>
+        <a href="#" onclick="showSection('projectInfo')">Project Info</a>
+        <a href="#" onclick="showSection('manageAccess')">Manage Access</a>
+    </div>
+
+    <!-- Page content -->
+    <div id="main" class="text-center flex-grow">
+        <div id="top-buttons" class="flex flex-wrap justify-center mt-8">
+            <button class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded m-2"
+                onclick="openNav()"><i class="fa-solid fa-house"></i></button>
+            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-2"
+                onclick="showSection('project')">Project</button>
+            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-2"
+                onclick="showSection('projectInfo')">Project Info</button>
+            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-2"
+                onclick="showSection('manageAccess')">Manage Access</button>
+        </div>
+
+        <!-- Project Section -->
+        <div id="projectSection" style="display: none;" class="container mx-auto mt-8 px-4">
+            <h2 class="text-2xl font-bold mb-4">Project</h2>
+            
+            <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for customer names.."
+                class="mt-4 p-2 border border-gray-300 rounded w-full md:w-1/2"> 
+                <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full mb-2"
+                onclick="addRow('project')">+</button>
+            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full mb-2"
+                onclick="removeRow('project')">-</button>
+            <div class="overflow-x-auto">
+                <table class="table-auto mx-auto mt-4">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2">Work Order No</th>
+                            <th class="px-4 py-2">Project Name</th>
+                            <th class="px-4 py-2">Start Date</th>
+                            <th class="px-4 py-2">End Date</th>
+                            <th class="px-4 py-2">Customer Name</th>
+                            <th class="px-4 py-2">Remark</th>
+                            <th class="px-4 py-2">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="projectRows">
+                        <!-- Rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- Project Info Section -->
+        <div id="projectInfoSection" style="display: none;" class="container mx-auto mt-8 px-4 py-10">
+            <h2 class="text-2xl text-white font-bold mb-4 bg-purple-500 p-3 rounded">Project Info</h2>
+
+            <!-- Summary BOM Subsection -->
+            <div class="mb-4">
+                <h3 class="text-xl text-purple-600 font-bold mb-2 bg-transparent p-2 rounded flex justify-between items-center">
+                    Summary BOM
+                    <div>
+                        <button
+                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded-full mb-1 mr-2"
+                            onclick="addRow('summaryBOM')">+</button>
+                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-full mb-1"
+                            onclick="removeRow('summaryBOM')">-</button>
+                    </div>
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="table-auto mx-auto mt-4">
+                        <thead>
+                            <tr>
+                                <th class="px-4 text-green-600 py-2">Category</th>
+                            </tr>
+                        </thead>
+                        <tbody id="summaryBOMRows">
+                            <!-- Rows will be dynamically added here -->
+                            <tr>
+                                <td class="border px-4 py-2">
+                                    <select class="form-control w-full p-2 border border-gray-300 rounded">
+                                        <option value="">Select Category</option>
+                                        <option value="Category 1">Category 1</option>
+                                        <option value="Category 2">Category 2</option>
+                                        <option value="Category 3">Category 3</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Design Subsection -->
+            <div class="mb-4">
+                <h3 class="text-xl font-bold mb-2 bg-transparent p-2 rounded text-purple-600 flex justify-between items-center">
+                    Design
+                    <div>
+                        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded-full mb-1 mr-2" onclick="addRow('design')">+</button>
+                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-full mb-1" onclick="removeRow('design')">-</button>
+                    </div>
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="table-auto mx-auto mt-4">
+                        <thead>
+                            <tr>
+                                <th class="px-4 text-green-600 py-2">Design Item</th>
+                                <th class="px-4 text-green-600  py-2">Role</th>
+                                <th class="px-4  text-green-600 py-2">Start Date</th>
+                                <th class="px-4 text-green-600 py-2">End Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="designRows">
+                            <!-- Rows will be dynamically added here -->
+                            <tr>
+                                <td class="border px-4 py-2"><input type="text" class="form-control p-2 border w-full" placeholder="Enter Design Item"></td>
+                                <td class="border px-4 py-2">
+                                    <select class="form-control w-full p-2 border border-gray-300 rounded">
+                                        <option value="">Select Role</option>
+                                        <!-- Add your role options here -->
+                                        <option value="Role 1">Role 1</option>
+                                        <option value="Role 2">Role 2</option>
+                                        <option value="Role 3">Role 3</option>
+                                    </select>
+                                </td>
+                                <td class="border px-4 py-2">
+                                    <select class="form-control w-full p-2 border border-gray-300 rounded">
+                                        <option value="">Select Start Date</option>
+                                        <!-- Add your start date options here -->
+                                        <option value="Date 1">Date 1</option>
+                                        <option value="Date 2">Date 2</option>
+                                        <option value="Date 3">Date 3</option>
+                                    </select>
+                                </td>
+                                <td class="border px-4 py-2">
+                                    <select class="form-control w-full p-2 border border-gray-300 rounded">
+                                        <option value="">Select End Date</option>
+                                        <!-- Add your end date options here -->
+                                        <option value="Date 1">Date 1</option>
+                                        <option value="Date 2">Date 2</option>
+                                        <option value="Date 3">Date 3</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+
+            <!-- PPE Subsection -->
+            <div class="mb-4">
+                <h3 class="text-xl font-bold mb-2 bg-transparent p-2 rounded text-purple-600 flex justify-between items-center">
+                    PPE
+                    <div>
+                        <button
+                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded-full mb-1 mr-2"
+                            onclick="addRow('ppe')">+</button>
+                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-full mb-1"
+                            onclick="removeRow('ppe')">-</button>
+                    </div>
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="table-auto mx-auto mt-4">
+                        <thead>
+                            <tr>
+                                <th class="px-4 text-green-600 py-2">PPE Item</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ppeRows">
+                            <!-- Rows will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Manage Access Section -->
+        <div id="manageAccessSection" style="display: none;" class="container mx-auto mt-8 px-4">
+            <h2 class="text-2xl p-3 bg-purple-500 font-bold text-white mb-4">Manage User Access</h2>
+           <br>
+             
+            <div id="manageAccessRows" class="text-center">
+                <div style="display: flex;" class="gap-10">
+                    <div style="flex: 2; margin-right: 5px;">
+                        <h3 class="bg-green-600 border rounded  font-bold pb-2 pt-4">WO Number</h3>
+                        <select class="form-control w-full p-2 border border-gray-300 rounded">
+                       
+                            <option value="">Select WO Number</option>
+                            <!-- Add your WO Number options here -->
+                            <option value="WO Number 1">WO Number 1</option>
+                            <option value="WO Number 2">WO Number 2</option>
+                            <option value="WO Number 3">WO Number 3</option>
+                        </select>
+                    </div>
+                    <div style="flex: 2; margin-right: 5px;">
+                        <h3 class="bg-green-600 border rounded  font-bold pb-2 pt-4">Department</h3>
+                        <select class="form-control w-full p-2 border border-gray-300 rounded">
+                            <option value="">Select Department</option>
+                            <!-- Add your Department options here -->
+                            <option value="Department 1">Department 1</option>
+                            <option value="Department 2">Department 2</option>
+                            <option value="Department 3">Department 3</option>
+                        </select>
+                    </div>
+                    <div style="flex: 2 ;">
+                        <h3 class="bg-green-600 border rounded  font-bold pb-2 pt-4">Employee</h3>
+                        <select class="form-control w-full p-2 border border-gray-300 rounded">
+                     
+                            <option value="">Select Employee</option>
+                            <!-- Add your Employee options here -->
+                            <option value="Employee 1">Employee 1</option>
+                            <option value="Employee 2">Employee 2</option>
+                            <option value="Employee 3">Employee 3</option>
+                        </select>
+                    </div>
+                </div>
+                <br><br>
+                <hr>
+                <div id="modulePermissions" class="container mx-auto mt-8 px-4">
+                    <h2 class="text-2xl font-bold mb-4">Module Permissions</h2>
+                    <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full mb-2"
+                        onclick="addModule()">+</button>
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full mb-2"
+                        onclick="removeModule()">-</button>
+                    <table class="table-auto mx-auto mt-4">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-2">Module Name</th>
+                                <th class="px-4 py-2">Create</th>
+                                <th class="px-4 py-2">Read</th>
+                                <th class="px-4 py-2">Update</th>
+                            </tr>
+                        </thead>
+                        <tbody id="moduleRows">
+                            <!-- Rows will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+      
+        
+        
+    </div>
+
+    <script src="index.js"></script>
+
+</body>
+
+</html>
